@@ -21,6 +21,10 @@ if (!$dblogin) {
 	die("Please load your database settings into fc-config.php before continuing.");
 }
 
+//Production or Sandbox Access
+$uri = "https://api.foxycart.com/token"; //Production Endpoint
+//$uri = "https://api-sandbox.foxycart.com/token"; //Sandbox Endpoint
+
 //Check Setup Status
 $db = Database::obtain($dbhost, $dblogin, $dbpassword, $dbname);
 $db->connect();
@@ -169,9 +173,6 @@ if ($act == "create_client") {
 		"client_secret" => $row['client_secret'],
 		"code" => $_GET['code'],
 	);
-
-	$uri = "https://api.foxycart.com/token"; //Production Endpoint
-	//$uri = "https://api-sandbox.foxycart.com/token"; //Sandbox Endpoint
 
 	//Send Request
 	$ch = curl_init();

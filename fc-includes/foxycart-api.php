@@ -30,8 +30,8 @@ class FoxyCartApiClient
 		//Set Access Token
 		$this->access_token = $access_token;
 
-		//Using Sandbox? Uncomment next line
-		//$this->api_home_page = "https://api-sandbox.foxycart.com"; //Sandbox Endpoint
+		//Using Sandbox? Uncomment this line
+		//$this->api_home_page = "https://api-sandbox.foxycart.com";
 
 		//Setup cURL
 		$this->ch = curl_init();

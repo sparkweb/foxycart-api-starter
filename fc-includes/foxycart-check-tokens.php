@@ -3,6 +3,10 @@
 
 function fc_check_token($token_type) {
 
+	//Production or Sandbox Access
+	$uri = "https://api.foxycart.com/token"; //Production Endpoint
+	//$uri = "https://api-sandbox.foxycart.com/token"; //Sandbox Endpoint
+
 	//Initialize DB
 	global $dbhost, $dblogin, $dbpassword, $dbname;
 	$db = Database::obtain($dbhost, $dblogin, $dbpassword, $dbname);
@@ -19,8 +23,6 @@ function fc_check_token($token_type) {
 
 	//This token needs to be renewed
 	if (strtotime($row['token_expiration']) < strtotime("now")) {
-		$uri = "https://api.foxycart.com/token"; //Production Endpoint
-		//$uri = "https://api-sandbox.foxycart.com/token"; //Sandbox Endpoint
 
 		//Get Client Info From DB
 		$sql = "SELECT * FROM `fc_oauth_tokens` WHERE token_name = 'fc_api_client'";
