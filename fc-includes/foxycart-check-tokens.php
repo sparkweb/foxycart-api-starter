@@ -57,9 +57,13 @@ function fc_check_token($token_type) {
 			//Save to Database
 			$new_settings = array(
 				"access_token" => $data['access_token'],
-				"refresh_token" => $data['refresh_token'],
 				"token_expiration" => date("Y-m-d H:i:s", strtotime("+" . ($data['expires_in'] - 300) . " seconds")),
 			);
+			
+			//If Refresh Token Was Returned
+			if (isset($data['refresh_token'])) {
+				$new_settings['refresh_token'] = $data['refresh_token'];
+			}
 			$db->update("fc_oauth_tokens", $new_settings, "token_name = 'fc_api_" . mysql_real_escape_string($token_type) . "'");
 
 			//Return New Token
