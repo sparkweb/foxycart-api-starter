@@ -17,7 +17,6 @@ class FoxyCartApiClient
 
 	//Link Vars
 	public $links = array();
-	public $rel_base = "https://api.foxycart.com/rels/";
 	public $registered_link_relations = array('self', 'first', 'prev', 'next', 'last');
 
 	//Required Headers
@@ -119,7 +118,7 @@ class FoxyCartApiClient
 		}
 	}
 	public function getLink($str) {
-		$search_string = in_array($str, $this->registered_link_relations) ? $str : $this->rel_base . $str;
+		$search_string = in_array($str, $this->registered_link_relations) ? $str : "fx:" . $str;
 		if (isset($this->links[$search_string])) {
 			return $this->links[$search_string]['href'];
 		} else {
@@ -129,10 +128,18 @@ class FoxyCartApiClient
 
 	public function checkForErrors($data) {
 		if ($this->last_status_code > 201) {
-			if (is_array($data) && isset($data['error_description'])) {
+			if (isset($data['error_description'])) {
 				return array($data['error_description']);
-			} elseif (is_array($data) && isset($data[0]['message'])) {
+			} elseif (isset($data['_embedded']['fx:errors'])) {
+				$errors = array();
+				foreach ($data['_embedded']['fx:errors'] as $error) {
+					$errors[] = $error['message'];
+				}
+				return $errors;
+			} elseif (isset($data[0]['message'])) {
 				return array($data[0]['message']);
+			} elseif (isset($data['message'])) {
+				return array($data['message']);
 			} else {
 				return array("No data returned.");
 			}
